@@ -6,7 +6,7 @@ PLATFORM_DARWIN = "Darwin"
 PLATFORM_LINUX = "Linux"
 PLATFORM = `uname`.chomp
 
-DEPENDENCIES = [ "git", "vim", "neovim", "silversearcher-ag", "zsh" ]
+DEPENDENCIES = [ "git", "vim", "neovim", "silversearcher-ag", "zsh", "ruby" ]
 GEMS = ["homesick"]
 
 def system_or_exit1(*args)
@@ -51,6 +51,7 @@ def install_vundle
 end
 
 puts "1. Installing dependencies"
+system_or_exit1("sudo apt-get update")
 DEPENDENCIES.each do |app|
   unless has_cmd?(app)
     puts "Installing: #{app}"
