@@ -36,17 +36,13 @@ def install_gem(_gem)
   system_or_exit1("gem install #{_gem}")
 end
 
-def move_defaults
-  if File.exist?("#{ENV['HOME']}/.zshrc")
-    puts "WARN: Moving #{ENV['HOME']}/.zshrc to #{ENV['HOME']}/.zshrc.default"
-    puts "      This file is load by the dotfile .zshrc"
-    FileUtils.mv("#{ENV['HOME']}/.zshrc", "#{ENV['HOME']}/.zshrc.default")
-  end
-
-  if File.exist?("#{ENV['HOME']}/.gitconfig")
-    puts "WARN: Moving #{ENV['HOME']}/.gitconfig to #{ENV['HOME']}/.gitconfig.default"
-    puts "      This file is load by the dotfile .gitconfig"
-    FileUtils.mv("#{ENV['HOME']}/.gitconfig", "#{ENV['HOME']}/.gitconfig.default")
+def move_defaults(file)
+  file = "#{ENV['HOME']}/#{file}"
+  default = "#{file}.default"
+  if File.exist?(file) && !File.exist?(default)
+    puts "WARN: Moving #{file} to #{default}"
+    puts "      This file will should be loaded by the dotfile #{file}"
+    FileUtils.mv(file, default)
   end
 end
 
@@ -71,7 +67,8 @@ GEMS.each do |app|
 end
 
 puts "3. Moving existing defaults"
-move_defaults
+move_defaults(".zshrc")
+move_defaults(".gitconfig")
 
 puts "4. Cloning dotfiles"
 system_or_exit1("mkdir -p $HOME/.homesick/repos")
